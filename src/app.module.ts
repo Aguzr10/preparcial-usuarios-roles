@@ -1,5 +1,6 @@
 import { ClassSerializerInterceptor, Module } from '@nestjs/common';
-import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { APP_FILTER, APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
+import { AuthMessagesFilter } from './common/auth-messages.filter.js';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
@@ -65,6 +66,8 @@ import { UsersModule } from './users/users.module.js';
     { provide: APP_INTERCEPTOR, useClass: ClassSerializerInterceptor },
     // Responde 429 Too Many Requests al pasar el límite
     { provide: APP_GUARD, useClass: ThrottlerGuard },
+    // 401 → "Token inválido o faltante", 403 → "No autorizado" (como el enunciado)
+    { provide: APP_FILTER, useClass: AuthMessagesFilter },
   ],
 })
 export class AppModule {}

@@ -99,8 +99,9 @@ Lo crea la migración `SeedAdmin`:
 | GET | `/users/me` | autenticado | 200 `{ id, email, name, phone, roles }` | 401 · 404 Usuario no encontrado |
 | GET | `/users` | admin | 200 `[{ id, email, name, roles }]` | 401 · 403 · 500 Error al listar usuarios |
 
-- **401**: sin token, token vencido o alterado. Lo responde `@nestjs/authentication`.
-- **403**: con token, pero sin el rol requerido. Lo responde `@nestjs/authorization`.
+- **401** `"Token inválido o faltante"`: sin token, token vencido o alterado. Lo detecta `@nestjs/authentication`.
+- **403** `"No autorizado"`: con token, pero sin el rol requerido. Lo detecta `@nestjs/authorization`.
+- Los textos de 401/403 los pone `AuthMessagesFilter` (`src/common/`); las rutas `/auth/*` conservan los suyos.
 - El token va en el header `Authorization: Bearer <accessToken>`.
 - `PATCH /users/:id/roles` **reemplaza** los roles del usuario por los enviados.
 - El registro no asigna roles: los asigna un admin.
@@ -114,12 +115,13 @@ Lo crea la migración `SeedAdmin`:
 - **JwtAuth** carga el usuario con sus roles en cada petición: un cambio de roles o una desactivación aplica de inmediato.
 - **Validación**: DTOs con `class-validator`. `whitelist` + `forbidNonWhitelisted`: un campo que no está en el DTO (por ejemplo `roles` en el registro) responde 400.
 - **Ids uuid**: no se pueden adivinar. `ParseUUIDPipe` responde 400 si el id no es uuid.
-- **`synchronize: false`**: el esquema lo definen las migraciones, no las entidades.
+- **`synchronize: false`**: el esquema lo definen las migraciones, no las entidades. Se probó que activarlo (`true`) sobre la base ya migrada no borra datos: solo agrega índices en `user_roles` y renombra sus llaves foráneas.
 - **helmet**: headers de seguridad.
 
 ## Entregables SQL
 
 - Migraciones: [`src/migrations/`](src/migrations)
+- Estructura de la base (`CREATE TABLE`): [`sql/estructura.sql`](sql/estructura.sql)
 - Script de usuarios y roles probados: [`sql/usuarios-roles-probados.sql`](sql/usuarios-roles-probados.sql)
 
 ```bash
