@@ -1,10 +1,14 @@
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 import { AppModule } from './app.module.js';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+
+  // Headers de seguridad (quita X-Powered-By: Express, agrega nosniff, etc.)
+  app.use(helmet());
 
   // Valida todos los DTOs: campos de más → 400, tipos se convierten
   app.useGlobalPipes(

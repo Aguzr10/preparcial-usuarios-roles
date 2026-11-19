@@ -9,9 +9,9 @@ import {
 } from 'typeorm';
 import { Role } from '../../roles/entities/role.entity.js';
 
+// Tabla users. Debe coincidir con la migración CreateUsersAndRoles.
 @Entity('users')
 export class User {
-  
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -29,6 +29,7 @@ export class User {
   @Column({ type: 'varchar', length: 20, nullable: true })
   phone: string | null;
 
+  // false = desactivado: el login responde 423
   @Column({ type: 'boolean', default: true })
   is_active: boolean;
 
