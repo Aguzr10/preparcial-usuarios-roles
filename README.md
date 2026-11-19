@@ -1,132 +1,148 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Preparcial: sistema de usuarios y roles
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+API REST con NestJS para el preparcial de ISIS3710 (Programación con Tecnologías Web).
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+- **Autenticación** con JWT (access token y refresh token con rotación) usando `@nestjs/authentication`.
+- **Autorización** por roles con policies de `@nestjs/authorization`.
+- **PostgreSQL** con TypeORM y migraciones SQL. Relación muchos a muchos entre usuarios y roles.
 
-## Description
+## Requisitos
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+- Node.js 22
+- Docker Desktop
 
-## Project setup
+## Cómo correrlo
+
+### 1. Instalar dependencias
 
 ```bash
-$ npm install
+npm install
 ```
 
-## Compile and run the project
+### 2. Variables de entorno
+
+Copia la plantilla y pon tus valores:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+cp .env.example .env
 ```
 
-## Run tests
+| Variable | Para qué | Ejemplo |
+|---|---|---|
+| `DB_HOST` | Host de PostgreSQL | `localhost` |
+| `DB_PORT` | Puerto de PostgreSQL en tu máquina | `5435` |
+| `DB_USER` | Usuario de la base | `user` |
+| `DB_PASS` | Contraseña de la base | — |
+| `DB_NAME` | Nombre de la base | `usuarios_roles_db` |
+| `JWT_SECRET` | Firma los tokens. Mínimo 32 caracteres aleatorios | ver abajo |
+| `JWT_EXPIRES_IN` | Duración del access token | `2m` |
+| `JWT_REFRESH_EXPIRES_IN` | Duración del refresh token | `7d` |
+
+Para generar `JWT_SECRET`:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+node -e "console.log(require('crypto').randomBytes(32).toString('hex'))"
 ```
 
-## Deployment
+El `.env` no se sube al repositorio (está en `.gitignore`).
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### 3. Levantar PostgreSQL
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+`docker-compose.yml` lee `DB_USER`, `DB_PASS`, `DB_NAME` y `DB_PORT` del `.env`:
 
 ```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
+docker compose up -d
 ```
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
-
-## Observability
-
-In production applications, observability is essential for understanding how your system behaves, detecting issues early, and maintaining reliable performance.
-
-[NestJS Observe](https://observe.nestjs.com) automatically instruments your NestJS application, giving you deep visibility into your system with minimal setup:
-
-- **Distributed tracing:** Follow requests across services and understand how they flow through your system.
-- **Waterfall analysis:** Visualize request execution and identify slow operations, bottlenecks, and unexpected delays.
-- **Performance analysis:** Analyze application performance in real time and quickly pinpoint areas that need optimization.
-- **Metrics:** Track key application and infrastructure metrics to understand system health and performance trends.
-- **Logging:** Centralize and correlate logs with traces and other telemetry to make debugging easier.
-- **Error tracking:** Detect errors quickly and investigate their root causes with the surrounding context.
-- **SLA monitoring:** Track service-level objectives and identify when your application is approaching or exceeding defined thresholds.
-- **Alarms and alerts:** Set up alerts for critical errors, performance degradation, SLA violations, and other anomalies so your team can react quickly.
-
-To add it to this project, run this and approve the code it prints at [observe.nestjs.com/link](https://observe.nestjs.com/link) - signing up for free if you have no account:
+### 4. Correr las migraciones
 
 ```bash
-$ npx @nestjs/observe link
+npm run migration:run
 ```
 
-It installs `@nestjs/observe`, wires it into `AppModule` and `main.ts`, and writes the app key and secret into `.env`, which every `nest start` script (`start`, `start:dev`, `start:debug`) then loads. In production, set `OBSERVE_APP_KEY` and `OBSERVE_APP_SECRET` in the environment instead.
+Crean las tablas `roles`, `users` y `user_roles`, el rol `admin` y el usuario admin inicial.
 
-Or do it by hand:
+| Comando | Qué hace |
+|---|---|
+| `npm run migration:run` | Corre las migraciones pendientes |
+| `npm run migration:revert` | Deshace la última |
+| `npm run migration:show` | Muestra cuáles corrieron `[X]` |
+
+### 5. Iniciar la API
 
 ```bash
-$ npm install @nestjs/observe
+npm run start:dev
 ```
 
-Then follow the [setup guide](https://docs.nestjs.com/observability/sdk) - it takes a single import and an app key.
+- API: `http://localhost:3000`
+- Swagger: `http://localhost:3000/api` (botón **Authorize** para pegar el `accessToken`)
 
-The free plan needs no payment details and covers 300,000 events a month. You can also browse the [live demo](https://www.observe-demo.nestjs.com/dashboard) first - the whole dashboard over a busy service's data, with nothing to install.
+## Usuario admin inicial
 
-## Resources
+Lo crea la migración `SeedAdmin`:
 
-Check out a few resources that may come in handy when working with NestJS:
+| Correo | Contraseña |
+|---|---|
+| `admin@admin.com` | `webparcial2611` |
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Auto-instrument your application with [NestJS Observe](https://observe.nestjs.com). Distributed tracing, metrics, and logging made easy. Error tracking and performance monitoring for your NestJS applications.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+## Endpoints
 
-## Support
+| Método | URI | Acceso | Éxito | Errores |
+|---|---|---|---|---|
+| POST | `/auth/register` | público | 201 `{ message, userId }` | 400 Email inválido · 409 Email ya registrado |
+| POST | `/auth/login` | público | 200 `{ accessToken, refreshToken, expiresIn }` | 401 Credenciales incorrectas · 423 Usuario desactivado |
+| POST | `/auth/refresh` | público | 200 `{ accessToken, refreshToken, expiresIn }` | 400 refreshToken es requerido · 401 inválido, ya usado o revocado |
+| POST | `/auth/logout` | público | 204 | 400 refreshToken es requerido |
+| POST | `/roles` | admin | 201 `{ message, roleId }` | 400 role_name es requerido · 401 · 403 · 409 role_name ya existe |
+| GET | `/roles` | admin | 200 `[{ id, role_name, description }]` | 401 · 403 · 500 Error al obtener roles |
+| PATCH | `/users/:id/roles` | admin | 200 `{ message: "Roles asignados" }` | 400 roles inválidos · 401 · 403 · 404 Usuario no encontrado |
+| GET | `/users/me` | autenticado | 200 `{ id, email, name, phone, roles }` | 401 · 404 Usuario no encontrado |
+| GET | `/users` | admin | 200 `[{ id, email, name, roles }]` | 401 · 403 · 500 Error al listar usuarios |
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- **401**: sin token, token vencido o alterado. Lo responde `@nestjs/authentication`.
+- **403**: con token, pero sin el rol requerido. Lo responde `@nestjs/authorization`.
+- El token va en el header `Authorization: Bearer <accessToken>`.
+- `PATCH /users/:id/roles` **reemplaza** los roles del usuario por los enviados.
+- El registro no asigna roles: los asigna un admin.
 
-## Stay in touch
+## Decisiones técnicas
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+- **Contraseñas**: se guarda el hash con `PasswordHasher` del paquete (scrypt). Nunca se devuelven: `@Exclude()` en la entidad y `ClassSerializerInterceptor` global.
+- **Login**: mismo mensaje para correo inexistente y contraseña mala, y el 423 se revisa después de la contraseña, para no revelar qué cuentas existen. Máximo 5 intentos por minuto por IP (`@nestjs/throttler`).
+- **Refresh tokens**: un solo uso (rotación). Reusar uno revoca toda la sesión. Se guardan en memoria (`allowInMemoryStorage: true`), así que se pierden al reiniciar la API.
+- **Policies** (`RolePolicy`, `UserPolicy`): el admin pasa todas las reglas con `before()`. Cerrado por defecto: toda ruta lleva `@Can()`, `@Can.Anyone()` o `@Public()`.
+- **JwtAuth** carga el usuario con sus roles en cada petición: un cambio de roles o una desactivación aplica de inmediato.
+- **Validación**: DTOs con `class-validator`. `whitelist` + `forbidNonWhitelisted`: un campo que no está en el DTO (por ejemplo `roles` en el registro) responde 400.
+- **Ids uuid**: no se pueden adivinar. `ParseUUIDPipe` responde 400 si el id no es uuid.
+- **`synchronize: false`**: el esquema lo definen las migraciones, no las entidades.
+- **helmet**: headers de seguridad.
 
-## License
+## Entregables SQL
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- Migraciones: [`src/migrations/`](src/migrations)
+- Script de usuarios y roles probados: [`sql/usuarios-roles-probados.sql`](sql/usuarios-roles-probados.sql)
+
+```bash
+docker exec -i usuarios_roles_db psql -U <DB_USER> -d <DB_NAME> < sql/usuarios-roles-probados.sql
+```
+
+## Estructura
+
+```
+src/
+├── auth/
+│   ├── auth.controller.ts   register, login, refresh, logout
+│   ├── jwt.auth.ts          carga el usuario (con roles) desde el token
+│   ├── is-admin.ts          lo usan los before() de las policies
+│   └── dto/
+├── roles/
+│   ├── role.policy.ts       quién puede crear y listar roles
+│   └── ...
+├── users/
+│   ├── user.policy.ts       quién puede listar usuarios y asignar roles
+│   └── ...
+├── migrations/              CreateUsersAndRoles, SeedAdmin
+├── data-source.ts           conexión que usa el CLI de migraciones
+├── app.module.ts            TypeORM, AuthenticationModule, AuthorizationModule
+└── main.ts                  ValidationPipe, helmet, Swagger
+```

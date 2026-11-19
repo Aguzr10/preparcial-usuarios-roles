@@ -4,6 +4,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { AuthenticationModule, type Duration } from '@nestjs/authentication';
+import { AuthorizationModule } from '@nestjs/authorization';
 import { AuthModule } from './auth/auth.module.js';
 import { RolesModule } from './roles/roles.module.js';
 import { UsersModule } from './users/users.module.js';
@@ -47,6 +48,10 @@ import { UsersModule } from './users/users.module.js';
         allowInMemoryStorage: true,
       }),
     }),
+
+    // Autorización: DESPUÉS de AuthenticationModule (su guard necesita el usuario).
+    // Cerrado por defecto: toda ruta necesita @Can(), @Can.Anyone() o @Public(); si no, 403.
+    AuthorizationModule.forRoot(),
 
     // Límite de peticiones: por defecto 100 por minuto; el login baja a 5 con @Throttle
     ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }]),
