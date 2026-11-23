@@ -1,3 +1,4 @@
+// NO TOCAR · ValidationPipe (los 400 de todos los DTOs), helmet y Swagger.
 import { ValidationPipe } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';

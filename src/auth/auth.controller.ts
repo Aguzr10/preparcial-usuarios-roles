@@ -1,3 +1,4 @@
+// NO TOCAR · register, login, refresh y logout ya cumplen el enunciado (201, 401, 423, rotación de tokens).
 import {
   Body,
   Controller,

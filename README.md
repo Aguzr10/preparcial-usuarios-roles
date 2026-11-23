@@ -115,7 +115,7 @@ Lo crea la migración `SeedAdmin`:
 - **JwtAuth** carga el usuario con sus roles en cada petición: un cambio de roles o una desactivación aplica de inmediato.
 - **Validación**: DTOs con `class-validator`. `whitelist` + `forbidNonWhitelisted`: un campo que no está en el DTO (por ejemplo `roles` en el registro) responde 400.
 - **Ids uuid**: no se pueden adivinar. `ParseUUIDPipe` responde 400 si el id no es uuid.
-- **`synchronize: false`**: el esquema lo definen las migraciones, no las entidades. Se probó que activarlo (`true`) sobre la base ya migrada no borra datos: solo agrega índices en `user_roles` y renombra sus llaves foráneas.
+- **Esquema**: las tablas del preparcial las crean las migraciones (release v1.0.0 con `synchronize: false`). Para el parcial se activó `synchronize: true` (permitido por el profesor) para crear tablas nuevas desde las entidades. Se probó que activarlo sobre la base ya migrada no borra datos: solo agrega índices en `user_roles` y renombra sus llaves foráneas.
 - **helmet**: headers de seguridad.
 
 ## Entregables SQL

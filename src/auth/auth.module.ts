@@ -1,3 +1,4 @@
+// NO TOCAR · Registra el controlador de tokens y JwtAuth.
 import { Module } from '@nestjs/common';
 import { UsersModule } from '../users/users.module.js';
 import { AuthController } from './auth.controller.js';

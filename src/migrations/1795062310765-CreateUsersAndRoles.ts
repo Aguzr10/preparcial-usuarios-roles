@@ -1,3 +1,4 @@
+// NO TOCAR · Esta migración ya corrió. Un cambio nuevo va en una migración NUEVA, no editando esta.
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 export class CreateUsersAndRoles1795062310765 implements MigrationInterface {

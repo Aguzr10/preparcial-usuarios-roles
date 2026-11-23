@@ -1,3 +1,4 @@
+# NO TOCAR · Cambiar usuario, contraseña, puerto o volumen deja la base sin acceso.
 services:
   postgres:
     image: postgres:17-alpine

@@ -1,3 +1,4 @@
+// NO TOCAR · Pone los mensajes del enunciado en el 401 y el 403 de toda la API.
 import {
   ArgumentsHost,
   Catch,

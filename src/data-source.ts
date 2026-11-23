@@ -1,3 +1,4 @@
+// NO TOCAR · Conexión que usan los comandos de migraciones (npm run migration:*).
 import { DataSource } from 'typeorm';
 
 // Conexión que usa el CLI de TypeORM para correr las migraciones.

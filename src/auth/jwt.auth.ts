@@ -1,3 +1,4 @@
+// NO TOCAR · Carga el usuario (con sus roles) desde el token en cada petición. Si se daña, nadie puede autenticarse.
 import { Injectable } from '@nestjs/common';
 import {
   AuthenticationRegistry,

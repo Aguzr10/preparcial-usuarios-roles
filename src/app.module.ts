@@ -12,6 +12,7 @@ import { UsersModule } from './users/users.module.js';
 
 @Module({
   imports: [
+    // SÍ SE PUEDE: agregar módulos nuevos al final de esta lista (nest g resource lo hace solo).
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
@@ -26,11 +27,15 @@ import { UsersModule } from './users/users.module.js';
         password: config.getOrThrow<string>('DB_PASS'),
         database: config.getOrThrow<string>('DB_NAME'),
         autoLoadEntities: true,
-        // false: las tablas las crean las migraciones (src/migrations), no las entidades
-        synchronize: false,
+        // true (para el parcial, lo permitió el profe): al arrancar, TypeORM crea las
+        // tablas nuevas a partir de las entidades. La base del preparcial la crean las
+        // migraciones (src/migrations), que siguen siendo el respaldo.
+        // ⚠️ Con true, BORRAR o RENOMBRAR un campo de una entidad borra esa columna y sus datos.
+        synchronize: true,
       }),
     }),
 
+    // NO TOCAR (AuthenticationModule y AuthorizationModule): son el 401 y el 403 de toda la API.
     // Autenticación: con solo importarlo, TODA ruta pide token (guard global).
     // Las que no, llevan @Public().
     AuthenticationModule.forRootAsync({

@@ -1,3 +1,4 @@
+// NO TOCAR · Body del registro. Sin campo roles a propósito: nadie se registra como admin.
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
   IsEmail,

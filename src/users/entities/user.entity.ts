@@ -1,3 +1,4 @@
+// NO BORRAR NI RENOMBRAR CAMPOS · con synchronize: true se borraría la columna y sus datos. Agregar campos nuevos sí se puede (con nullable o default).
 import { Exclude } from 'class-transformer';
 import {
   Column,

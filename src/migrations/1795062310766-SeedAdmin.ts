@@ -1,3 +1,4 @@
+// NO TOCAR · Esta migración ya corrió. Crea el rol admin y admin@admin.com: sin ellos nadie puede crear roles ni asignar permisos.
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
 // Crea el rol admin y el primer usuario admin.
