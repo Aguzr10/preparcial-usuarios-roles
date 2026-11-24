@@ -21,10 +21,10 @@ export class Reservation {
     @CreateDateColumn({ type: 'date', nullable:true})
     date: Date | null;
 
-    @Column({type: 'string', nullable:true, default: 'ABC123' })
+    @Column({type: 'varchar', nullable:true, default: 'ABC123' })
     vehicle_plate: string | null;
     
-    @Column({type: 'enum', enum: ['standard', 'ultra_fast', 'fast'], nullable:true, default: 'vehicle_max_charge' })   
+    @Column({type: 'enum', enum: ['standard', 'ultra_fast', 'fast'], nullable:true })   
     vehicle_max_charge: 'standard' | 'ultra_fast' | 'fast';
 
     @Column({type: 'enum', enum: ['pending', 'completed', 'cancelled'], nullable:true, default: 'pending' })
