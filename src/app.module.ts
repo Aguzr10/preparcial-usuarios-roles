@@ -9,6 +9,8 @@ import { AuthorizationModule } from '@nestjs/authorization';
 import { AuthModule } from './auth/auth.module.js';
 import { RolesModule } from './roles/roles.module.js';
 import { UsersModule } from './users/users.module.js';
+import { ReservationsModule } from './reservations/reservations.module.js';
+import { ParkingspotsModule } from './parkingspots/parkingspots.module.js';
 
 @Module({
   imports: [
@@ -65,6 +67,8 @@ import { UsersModule } from './users/users.module.js';
     AuthModule,
     RolesModule,
     UsersModule,
+    ReservationsModule,
+    ParkingspotsModule,
   ],
   providers: [
     // Aplica @Exclude() a todas las respuestas (el password nunca sale)
