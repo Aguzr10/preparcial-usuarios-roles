@@ -48,6 +48,7 @@ export class ReservationsService {
       Object.assign(reservation, dto);
       return this.reservation.save(reservation);
 
+
       }
     }
   }
@@ -58,10 +59,14 @@ export class ReservationsService {
 // DELETE /reservas
 async remove(id: number): Promise<void> {
   const reservation = await this.findOne(id);
-  const Parkingspot = await this.parkingspotRepository.findOne({ where: { id: reservation.reserved_spot_id } });
-
   if (!reservation) {
     throw new NotFoundException('Reservation not found');
+  }
+  const Parkingspot = await this.parkingspotRepository.findOne({ where: { id: reservation.reserved_spot_id } });
+
+  if (!Parkingspot) {
+    throw new NotFoundException('Parking spot not found');
+  }
 
   }
   return this.reservationRepository.remove(reservation);
